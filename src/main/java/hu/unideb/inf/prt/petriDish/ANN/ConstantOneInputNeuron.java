@@ -6,4 +6,7 @@ public class ConstantOneInputNeuron implements Neuron {
 		return 1;
 	}
 
+	public void preCalc() {
+	}
+
 }

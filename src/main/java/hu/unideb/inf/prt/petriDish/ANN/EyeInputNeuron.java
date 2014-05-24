@@ -10,13 +10,14 @@ import java.util.List;
 public class EyeInputNeuron implements Neuron {
 
 	private Agent owner;
+	private double stored;
 	
 	public EyeInputNeuron(Agent owner)
 	{
 		this.owner=owner;
 	}
 	
-	public double getValue() {
+	public void preCalc() {
 		List<Entity> entities = Game.getInstance().getEntities();
 		double minDst=Agent.viewDistanceSquared+1;
 		for (Entity e : entities)
@@ -29,9 +30,14 @@ public class EyeInputNeuron implements Neuron {
 		}
 		if (minDst<Agent.viewDistanceSquared+1)
 		{
-			return minDst/Agent.viewDistanceSquared;
+			stored = minDst/Agent.viewDistanceSquared;
 		}
-		return 0;
+		stored = 0;
+	}
+	
+	public double getValue()
+	{
+		return stored;
 	}
 
 }

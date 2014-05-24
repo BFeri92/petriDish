@@ -11,6 +11,10 @@ public class HungerInputNeuron implements Neuron {
 		this.owner=owner;
 	}
 	
+	public void preCalc()
+	{
+	}
+	
 	public double getValue() {
 		return owner.getHunger();
 	}

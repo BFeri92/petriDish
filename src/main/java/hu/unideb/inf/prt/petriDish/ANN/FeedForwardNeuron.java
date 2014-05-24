@@ -5,8 +5,7 @@ import java.util.Vector;
 
 public class FeedForwardNeuron implements Neuron {
 	
-	private double lastInp=-1280;
-	private double lastOutp;
+	private double stored;
 	
 	public class WeigthNumberNotMatchException extends Exception
 	{
@@ -35,20 +34,19 @@ public class FeedForwardNeuron implements Neuron {
 		return 1.0/(1.0+Math.exp(-x));
 	}
 	
-	public double getValue() {
+	public void preCalc()
+	{
 		double weightedInput=0;
 		List<Neuron> connected = previous.getNeurons();
 		for (int i=0; i<previous.getNeuronCount(); i++)
 		{
 			weightedInput+=connected.get(i).getValue()*weigths.get(i);
 		}
-		if (lastInp!=weightedInput)
-		{
-			lastInp = weightedInput;
-			lastOutp = logSigmoid(weightedInput);
-			return lastOutp;
-		}
-		else return lastOutp;
+		stored = logSigmoid(weightedInput);
+	}
+	
+	public double getValue() {
+		return stored;
 	}
 
 }

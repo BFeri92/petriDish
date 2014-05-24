@@ -58,6 +58,11 @@ public class ANN {
 	public List<Double> run()
 	{
 		List<Double> res = new Vector<Double>(Constants.outputNeuronCount);
+		for (Layer l : layers)
+		{
+			for (Neuron n : l.getNeurons())
+				n.preCalc();
+		}
 		for (Neuron o : layers.get(layers.size()-1).getNeurons())
 		{
 			res.add(o.getValue());

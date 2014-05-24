@@ -21,6 +21,7 @@ public class FeedForwardNeuronTest {
 		weights.add(1.0);
 		try {
 			FeedForwardNeuron neuron = new FeedForwardNeuron(l, weights);
+			neuron.preCalc();
 			assertEquals(neuron.getValue(), 1.0/(1.0+Math.exp(-2.0)), 1e-15 );
 			
 		} catch (WeigthNumberNotMatchException e) {
