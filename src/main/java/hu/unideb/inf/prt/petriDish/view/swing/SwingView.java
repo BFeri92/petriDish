@@ -1,5 +1,7 @@
 package hu.unideb.inf.prt.petriDish.view.swing;
 
+import javax.swing.JOptionPane;
+
 import hu.unideb.inf.prt.petriDish.Game;
 import hu.unideb.inf.prt.petriDish.view.View;
 
@@ -19,7 +21,7 @@ public class SwingView implements View {
 	}
 
 	public void error(String messg) {
-
+		JOptionPane.showMessageDialog(null, messg, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void close() {
