@@ -80,7 +80,6 @@ public class AgentTest {
 		try {
 			Thread.sleep(800);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
