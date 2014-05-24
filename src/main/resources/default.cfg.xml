@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gameConfiguration>
+    <agentCount>30</agentCount>
+    <foodAmountIncrese>2.0</foodAmountIncrese>
+    <hiddenLayers>2</hiddenLayers>
+    <initialFoodAmount>10</initialFoodAmount>
+    <mutate>true</mutate>
+    <mutationAmount>1.0</mutationAmount>
+    <mutationProb>0.3</mutationProb>
+    <nodesPerHiddenLayer>8</nodesPerHiddenLayer>
+    <recombine>true</recombine>
+    <winnerCount>5</winnerCount>
+    <worldSize>1000</worldSize>
+</gameConfiguration>

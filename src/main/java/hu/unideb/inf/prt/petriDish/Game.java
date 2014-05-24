@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class Game {
 		logger.info("Creating user interface");
 		ui = new SwingView();
 	}
+	
 	static public Game getInstance()
 	{
 		if (instance==null)
@@ -54,17 +57,20 @@ public class Game {
 	public void pauseSimulation()
 	{
 		if (sim!=null)
-		try {
-			sim.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		}
+			sim.pause();
 	}
 	
-	public void resumeSimulation()
+	public void startSimulation()
 	{
-		if (sim!=null)
-			sim.notify();
+		if (sim==null) return;
+		
+		if (sim.getState()==Thread.State.NEW)
+		{
+			sim.start();
+		} else if (sim.getState()==Thread.State.WAITING)
+		{
+			sim.unPause();
+		}
 	}
 	
 	public void loadWorldDescriptor(String fname)
@@ -80,7 +86,6 @@ public class Game {
 				sim.stopSimulation();
 			}
 			sim = new Simulation(descr, dly);
-			sim.start();
 		} else ui.error("Could not load world descriptor file.");
 	}
 	
@@ -97,7 +102,6 @@ public class Game {
 				sim.stopSimulation();
 			}
 			sim = new Simulation(new WorldDescriptor(conf), dly);
-			sim.start();
 		} else ui.error("Could not load game configuration file.");		
 	}
 	
@@ -141,6 +145,25 @@ public class Game {
 		
 	}
 	
+	public void loadDefaultConfiguration()
+	{
+		InputStream resource = Game.class.getResourceAsStream("/default.cfg.xml");	
+		ConfigLoader loader = new JAXBConfigLoader(resource);
+		GameConfiguration conf = loader.load();
+		long dly=100;
+		if (conf!=null)
+		{
+			if (sim!=null)
+			{
+				dly = sim.getDelay();
+				sim.stopSimulation();
+			}
+			this.stopSimulation();
+			sim = new Simulation(new WorldDescriptor(conf), dly);
+		} else ui.error("Could not load default game configuration file.");	
+		
+	}
+	
 	public void setDelay(long dly)
 	{
 		if (sim!=null)
@@ -150,10 +173,16 @@ public class Game {
 	public void stopSimulation()
 	{
 		if (sim!=null)
+		{
+			if (sim.getState()==Thread.State.WAITING)
+			{
+				sim.unPause();
+			}
 			sim.stopSimulation();
+		}
 	}
 	
-	public List<Entity> getEntities()
+	public synchronized List<Entity> getEntities()
 	{
 		if (sim!=null)
 			return Collections.unmodifiableList(sim.getWorld().getEntities());
@@ -184,4 +213,11 @@ public class Game {
 			return sim.getWorld().getConfiguration().getAgentCount() - sim.getWorld().getDead().size();
 		} else return 0;
 	}
+	
+	public boolean hasSimulationLoaded()
+	{
+		if (sim==null) return false;
+		return true;
+	}
+	
 }

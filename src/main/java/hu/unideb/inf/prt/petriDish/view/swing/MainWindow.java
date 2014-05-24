@@ -114,6 +114,7 @@ public class MainWindow extends JFrame {
 			if ( fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION )
 			{
 				Game.getInstance().loadGameConfiguration(fileChooser.getSelectedFile().getPath());
+				Game.getInstance().startSimulation();
 			}
 		}
 		
@@ -127,9 +128,30 @@ public class MainWindow extends JFrame {
 			if ( fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION )
 			{
 				Game.getInstance().loadWorldDescriptor(fileChooser.getSelectedFile().getPath());
+				Game.getInstance().startSimulation();
 			}			
 		}
 		
+	}
+	
+	private class onStartClicked implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0) {
+			if (Game.getInstance().hasSimulationLoaded())
+			{
+				Game.getInstance().startSimulation();
+			} else {
+				Game.getInstance().loadDefaultConfiguration();
+				Game.getInstance().startSimulation();
+			}
+		}
+	}
+	
+	private class onPauseClicked implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0) {
+			Game.getInstance().pauseSimulation();
+		}
 	}
 	
 	private class onSaveSimulationClicked implements ActionListener
@@ -195,9 +217,11 @@ public class MainWindow extends JFrame {
 		menuBar.add(mnSimulation);
 		
 		mntmStart = new JMenuItem("Start");
+		mntmStart.addActionListener(new onStartClicked());
 		mnSimulation.add(mntmStart);
 		
 		mntmPause = new JMenuItem("Pause");
+		mntmPause.addActionListener(new onPauseClicked());
 		mnSimulation.add(mntmPause);
 		
 		separator = new JSeparator();

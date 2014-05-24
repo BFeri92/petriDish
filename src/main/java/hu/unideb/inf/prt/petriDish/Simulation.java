@@ -17,6 +17,7 @@ public class Simulation extends Thread {
 	private GameWorld world;
 	private int generation;
 	private long delay;
+	private boolean pause = false;
 	public long getDelay() {
 		return delay;
 	}
@@ -53,6 +54,12 @@ public class Simulation extends Thread {
 			running = true;
 			while (running) {
 				try {
+					if (pause)
+					{
+						synchronized (this) {
+							wait();
+						}
+					}
 					world.step();
 					if (world.getDead().size() == conf.getAgentCount()) {
 						List<Genotype> parents = new ArrayList<Genotype>(
@@ -104,5 +111,19 @@ public class Simulation extends Thread {
 	
 	public List<WorldDescriptor> getWDStack() {
 		return Collections.unmodifiableList(WDStack);
+	}
+	
+	public void pause()
+	{
+		logger.info("Game paused.");
+		this.pause=true;
+	}
+	
+	public void unPause()
+	{
+		synchronized (this) {
+			this.pause=false;
+			this.notify();
+		}
 	}
 }
