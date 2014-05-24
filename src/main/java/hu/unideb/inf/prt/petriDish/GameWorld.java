@@ -19,8 +19,8 @@ public class GameWorld {
 			throws WeigthNumberNotMatchException {
 		stepCount = 0;
 		conf = descr.configuration();
-		entities = new LinkedList<Entity>();
-		dead = new LinkedList<Entity>();
+		entities = Collections.synchronizedList(new LinkedList<Entity>());
+		dead = Collections.synchronizedList(new LinkedList<Entity>());
 		Random rng = new Random();
 		// adding agents
 		for (int i = 0; i < conf.getAgentCount(); i++) {
