@@ -35,7 +35,7 @@ public class Agent extends Entity {
 		List<Double> annOut = network.run();
 		if (annOut.get(0)>.5 && annOut.get(1)<=.5)
 		{
-			headingDelta=-5;
+			headingDelta=5;
 			movement=0;
 			hunger+=.0009;
 		} else
