@@ -31,8 +31,10 @@ public class EyeInputNeuron implements Neuron {
 		if (minDst<Agent.viewDistanceSquared+1)
 		{
 			stored = minDst/Agent.viewDistanceSquared;
+			return;
 		}
 		stored = 0;
+		return;
 	}
 	
 	public double getValue()

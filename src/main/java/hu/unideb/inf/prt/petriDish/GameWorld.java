@@ -103,14 +103,16 @@ public class GameWorld {
 				}
 			}
 		}
-		
-		double foodIncrProb = getConfiguration().getFoodAmountIncrese();
-		Random rng = new Random();
-		for (; foodCount>0; foodCount--)
+		if (foodCount<50)
 		{
-			if (foodIncrProb > rng.nextDouble())
+			double foodIncrProb = getConfiguration().getFoodAmountIncrese();
+			Random rng = new Random();
+			for (; foodCount>0; foodCount--)
 			{
-				entities.add(new FoodEntity(rng.nextInt(conf.getWorldSize()+1),rng.nextInt(conf.getWorldSize()+1)));
+				if (foodIncrProb > rng.nextDouble())
+				{
+					entities.add(new FoodEntity(rng.nextInt(conf.getWorldSize()+1),rng.nextInt(conf.getWorldSize()+1)));
+				}
 			}
 		}
 	}
