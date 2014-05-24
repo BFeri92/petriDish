@@ -72,6 +72,7 @@ public class Simulation extends Thread {
 						}
 						WorldDescriptor braveNewWorld = new WorldDescriptor(
 								parents, conf);
+						WDStack.get(WDStack.size()-1).setFitness(this.getWorldAge());
 						WDStack.add(braveNewWorld);
 						world = new GameWorld(braveNewWorld);
 					}

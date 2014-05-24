@@ -27,7 +27,7 @@ public class WorldDescriptor {
 	@XmlElement(name = "genotype")
 	private List<Genotype> genotypes;
 	@XmlElement
-	private int fitness;
+	private long fitness;
 	@XmlElement
 	private GameConfiguration conf;
 
@@ -72,11 +72,11 @@ public class WorldDescriptor {
 		}
 	}
 
-	public int getFitness() {
+	public long getFitness() {
 		return fitness;
 	}
 
-	public void setFitness(int f) {
+	public void setFitness(long f) {
 		fitness = f;
 	}
 
