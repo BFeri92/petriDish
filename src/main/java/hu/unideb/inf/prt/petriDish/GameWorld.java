@@ -51,6 +51,7 @@ public class GameWorld {
 	public void step()
 	{
 		stepCount++;
+		int foodCount = 0;
 		Iterator<Entity> it = entities.iterator();
 		while (it.hasNext())
 		{
@@ -84,7 +85,7 @@ public class GameWorld {
 					a.setyPos(0);
 				if (a.getyPos()>conf.getWorldSize())
 					a.setyPos(conf.getWorldSize());
-			}
+			} else if (curr.getClass().equals(FoodEntity.class)) foodCount++;
 		}
 
 		
@@ -100,6 +101,16 @@ public class GameWorld {
 					entities.remove(j);
 					j--;
 				}
+			}
+		}
+		
+		double foodIncrProb = getConfiguration().getFoodAmountIncrese();
+		Random rng = new Random();
+		for (; foodCount>0; foodCount--)
+		{
+			if (foodIncrProb > rng.nextDouble())
+			{
+				entities.add(new FoodEntity(rng.nextInt(conf.getWorldSize()+1),rng.nextInt(conf.getWorldSize()+1)));
 			}
 		}
 	}
