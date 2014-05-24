@@ -18,6 +18,7 @@ public class Simulation extends Thread {
 	private int generation;
 	private long delay;
 	private boolean pause = false;
+
 	public long getDelay() {
 		return delay;
 	}
@@ -30,7 +31,7 @@ public class Simulation extends Thread {
 	private boolean running;
 
 	Simulation(WorldDescriptor descr, long stepDelay) {
-		generation=0;
+		generation = 0;
 		WDStack = new Vector<WorldDescriptor>();
 		logger.info("Creating new simulation");
 		WDStack.add(descr);
@@ -54,8 +55,7 @@ public class Simulation extends Thread {
 			running = true;
 			while (running) {
 				try {
-					if (pause)
-					{
+					if (pause) {
 						synchronized (this) {
 							wait();
 						}
@@ -66,10 +66,12 @@ public class Simulation extends Thread {
 								conf.getWinnerCount());
 						generation++;
 						for (int i = 0; i < conf.getWinnerCount(); i++) {
-							Agent a = (Agent)world.getDead().get(world.getDead().size()-(1+i));
+							Agent a = (Agent) world.getDead().get(
+									world.getDead().size() - (1 + i));
 							parents.add(a.getGenotype());
 						}
-						WorldDescriptor braveNewWorld = new WorldDescriptor(parents, conf);
+						WorldDescriptor braveNewWorld = new WorldDescriptor(
+								parents, conf);
 						WDStack.add(braveNewWorld);
 						world = new GameWorld(braveNewWorld);
 					}
@@ -80,27 +82,28 @@ public class Simulation extends Thread {
 					}
 					Thread.sleep(delay);
 				} catch (InterruptedException e) {
-					// TODO: Itt mit?
+					e.printStackTrace();
 				} catch (GenomSizeNotMatchException e) {
-					// TODO Auto-generated catch block
+					logger.error("Genom size not match at simulation.");
+					logger.warn("There exception shouldn't be thrown, because we use the current world to generate a new one.");
 				} catch (WeigthNumberNotMatchException e) {
-					// TODO Auto-generated catch block
+					logger.error("Genom size not match at simulation.");
+					logger.warn("There exception shouldn't be thrown, because we use the current world to generate a new one.");					
 				}
 			}
 		}
 	}
 
-	public int getGeneration()
-	{
+	public int getGeneration() {
 		return generation;
 	}
-	
-	public long getWorldAge()
-	{
-		if (world!=null) return world.getStepCount();
+
+	public long getWorldAge() {
+		if (world != null)
+			return world.getStepCount();
 		return 0;
 	}
-	
+
 	public void stopSimulation() {
 		running = false;
 	}
@@ -108,21 +111,19 @@ public class Simulation extends Thread {
 	public GameWorld getWorld() {
 		return world;
 	}
-	
+
 	public List<WorldDescriptor> getWDStack() {
 		return Collections.unmodifiableList(WDStack);
 	}
-	
-	public void pause()
-	{
+
+	public void pause() {
 		logger.info("Game paused.");
-		this.pause=true;
+		this.pause = true;
 	}
-	
-	public void unPause()
-	{
+
+	public void unPause() {
 		synchronized (this) {
-			this.pause=false;
+			this.pause = false;
 			this.notify();
 		}
 	}

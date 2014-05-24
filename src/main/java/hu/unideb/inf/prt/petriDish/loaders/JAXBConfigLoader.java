@@ -78,7 +78,8 @@ public class JAXBConfigLoader implements ConfigLoader {
 			logger.debug("Error message is: " + e.getMessage());
 			return null;
 		} catch (FileNotFoundException e) {
-			logger.error("Could not load world description file "+f+", file not found.");
+			logger.error("Could not load world description file " + f
+					+ ", file not found.");
 			return null;
 		}
 	}
@@ -101,11 +102,11 @@ public class JAXBConfigLoader implements ConfigLoader {
 			logger.debug("Error message is: " + e.getMessage());
 			return false;
 		} catch (FileNotFoundException e) {
-			logger.error("Could create world descriptor file "+f);
+			logger.error("Could create world descriptor file " + f);
 			return false;
-		} finally
-		{
-			if (ostreamCreatedHere) ostream=null;
+		} finally {
+			if (ostreamCreatedHere)
+				ostream = null;
 		}
 	}
 }

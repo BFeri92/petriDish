@@ -42,10 +42,9 @@ public class ANN {
 		}
 		// Finally, the output layer
 		Layer outp = new Layer();
-		for (int n = 0; n<Constants.outputNeuronCount ;n++)
-		{
+		for (int n = 0; n < Constants.outputNeuronCount; n++) {
 			List<Double> weigths = new Vector<Double>(
-				prevLayer.getNeuronCount());
+					prevLayer.getNeuronCount());
 			for (int j = 0; j < prevLayer.getNeuronCount(); j++) {
 				weigths.add(genom.get(currGene));
 				currGene++;
@@ -54,17 +53,14 @@ public class ANN {
 		}
 		layers.add(outp);
 	}
-	
-	public List<Double> run()
-	{
+
+	public List<Double> run() {
 		List<Double> res = new Vector<Double>(Constants.outputNeuronCount);
-		for (Layer l : layers)
-		{
+		for (Layer l : layers) {
 			for (Neuron n : l.getNeurons())
 				n.preCalc();
 		}
-		for (Neuron o : layers.get(layers.size()-1).getNeurons())
-		{
+		for (Neuron o : layers.get(layers.size() - 1).getNeurons()) {
 			res.add(o.getValue());
 		}
 		return res;

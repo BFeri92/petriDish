@@ -20,33 +20,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JAXBWDLoader implements WDLoader {
-	
+
 	static private Logger logger = LoggerFactory.getLogger(JAXBWDLoader.class);
 
 	private InputStream istream = null;
 	private OutputStream ostream = null;
 	private File f;
-	
+
 	/**
-	 * Constructor, the world descriptor will be loaded/saved to the
-	 * file described by the parameter.
-	 * @param f File to use
+	 * Constructor, the world descriptor will be loaded/saved to the file
+	 * described by the parameter.
+	 * 
+	 * @param f
+	 *            File to use
 	 */
-	public JAXBWDLoader(File f)
-	{
+	public JAXBWDLoader(File f) {
 		this.f = f;
 	}
 
 	/**
-	 * Constructor, the world descriptor will be loaded/saved to the
-	 * file described by the parameter.
-	 * @param f File path of the file to use
+	 * Constructor, the world descriptor will be loaded/saved to the file
+	 * described by the parameter.
+	 * 
+	 * @param f
+	 *            File path of the file to use
 	 */
-	public JAXBWDLoader(String path)
-	{
+	public JAXBWDLoader(String path) {
 		f = new File(path);
 	}
-	
+
 	public JAXBWDLoader(InputStream istream) {
 		this.istream = istream;
 		this.ostream = null;
@@ -56,7 +58,7 @@ public class JAXBWDLoader implements WDLoader {
 		this.ostream = ostream;
 		this.istream = null;
 	}
-	
+
 	public WorldDescriptor load() {
 
 		try {
@@ -66,16 +68,16 @@ public class JAXBWDLoader implements WDLoader {
 			JAXBContext context = JAXBContext
 					.newInstance(WorldDescriptor.class);
 			Unmarshaller umarsh = context.createUnmarshaller();
-			WorldDescriptor ret = (WorldDescriptor) umarsh
-					.unmarshal(istream);
+			WorldDescriptor ret = (WorldDescriptor) umarsh.unmarshal(istream);
 			logger.info("World descriptor file loaded: " + f);
 			return ret;
 		} catch (JAXBException e) {
-			logger.error("Could not load world description file "+f);
-			logger.error("Error message is: "+e);
+			logger.error("Could not load world description file " + f);
+			logger.error("Error message is: " + e);
 			return null;
 		} catch (FileNotFoundException e) {
-			logger.error("Could not load world description file "+f+", file not found.");
+			logger.error("Could not load world description file " + f
+					+ ", file not found.");
 			return null;
 		}
 	}
@@ -94,16 +96,16 @@ public class JAXBWDLoader implements WDLoader {
 			marsh.marshal(descr, ostream);
 			return true;
 		} catch (JAXBException e) {
-			logger.error("Could not save world descriptor to "+f);
-			logger.error("Error message is: "+e.getMessage());
+			logger.error("Could not save world descriptor to " + f);
+			logger.error("Error message is: " + e.getMessage());
 			System.out.println(e.getStackTrace());
 			return false;
 		} catch (FileNotFoundException e) {
-			logger.error("Could create world descriptor file "+f);
+			logger.error("Could create world descriptor file " + f);
 			return false;
-		} finally
-		{
-			if (ostreamCreatedHere) ostream=null;
+		} finally {
+			if (ostreamCreatedHere)
+				ostream = null;
 		}
 	}
 }

@@ -6,25 +6,21 @@ import java.util.Vector;
 
 public class Layer {
 	protected List<Neuron> neurons;
-	
-	public Layer()
-	{
+
+	public Layer() {
 		neurons = new Vector<Neuron>();
 	}
-	
-	public int getNeuronCount()
-	{
+
+	public int getNeuronCount() {
 		return neurons.size();
 	}
-	
-	public List<Neuron> getNeurons()
-	{
+
+	public List<Neuron> getNeurons() {
 		return Collections.unmodifiableList(neurons);
 	}
-	
-	public void insertNeuron(Neuron n)
-	{
+
+	public void insertNeuron(Neuron n) {
 		neurons.add(n);
 	}
-	
+
 }
