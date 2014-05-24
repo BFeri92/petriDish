@@ -117,6 +117,8 @@ public class Game {
 								tar_output);
 				/* Create Archieve entry - write header information */
 				for (int i = 0; i < worldsToSave.size(); i++) {
+					System.out.println(td + "/"
+							+ Integer.toString(i) + ".xml");
 					File tar_input_file = new File(td + "/"
 							+ Integer.toString(i) + ".xml");
 					TarArchiveEntry tar_file = new TarArchiveEntry(
@@ -127,11 +129,11 @@ public class Game {
 							my_tar_ball);
 					my_tar_ball.closeArchiveEntry();
 				}
-				my_tar_ball.closeArchiveEntry();
 				my_tar_ball.finish();
 				tar_output.close();
 			} catch (IOException e) {
 				logger.error("IO error while saving simulation.");
+				System.out.println(e);
 				ui.error("Exception occured while saving simulation.");
 			} catch (ArchiveException e) {
 				logger.error("Error while creating TAR archive");
