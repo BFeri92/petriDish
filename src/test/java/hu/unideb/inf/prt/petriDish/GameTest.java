@@ -14,11 +14,20 @@ import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link Game}
+ * @author Ferenc Barta
+ *
+ */
 public class GameTest {
 	
 	@Rule
 	public TemporaryFolder tempf = new TemporaryFolder();
 
+	/**
+	 * Tests {@link Game#loadGameConfiguration(String)}, {@link Game#loadWorldDescriptor(String)},
+	 * getters.
+	 */
 	@Test
 	public void test() {
 		GameConfiguration conf = new GameConfiguration();

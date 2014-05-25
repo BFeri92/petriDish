@@ -6,9 +6,16 @@ import hu.unideb.inf.prt.petriDish.ANN.FeedForwardNeuron.WeigthNumberNotMatchExc
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+/**
+ * Test for {@link HungerInputNeuron}.
+ * @author Ferenc Barta
+ *
+ */
 public class HungerInputNeuronTest {
 
+	/**
+	 * Tests if initial hunger is 0.
+	 */
 	@Test
 	public void testGetValue() {
 		Genotype g = new Genotype(1, 1);

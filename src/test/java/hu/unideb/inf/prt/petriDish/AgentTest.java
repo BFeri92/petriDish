@@ -9,13 +9,33 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Test for {@link Agent}.
+ * @author Ferenc Barta
+ *
+ */
 public class AgentTest {
 
+	/**
+	 * Agent to test forward movement.
+	 */
 	private static Agent moveForwardAgent;
+	/**
+	 * Agent to test staying in place.
+	 */
 	private static Agent shouldntMoveAgent;
+	/**
+	 * Agent to test right turn.
+	 */
 	private static Agent turnRightAgent;
+	/**
+	 * Agent to test left turn.
+	 */
 	private static Agent turnLeftAgent;
 	
+	/**
+	 * Initialize the agents.
+	 */
 	@BeforeClass
 	public static void beforeClass()
 	{
@@ -84,6 +104,9 @@ public class AgentTest {
 		}
 	}
 	
+	/**
+	 * Tests if getGenotype returns the actual genotype.
+	 */
 	@Test
 	public void testGetGenotype() {
 		Genotype genotype = moveForwardAgent.getGenotype();
@@ -97,6 +120,9 @@ public class AgentTest {
 		assertEquals(actualGenes, genes);
 	}
 
+	/**
+	 * Test forward movement.
+	 */
 	@Test
 	public void testMoveFwd()
 	{
@@ -107,6 +133,9 @@ public class AgentTest {
 		assertEquals("moveForwardAgent's heading was wrong", 0.0, moveForwardAgent.getHeading(), 0.0);
 	}
 	
+	/**
+	 * Test staying in place.
+	 */
 	public void testStayInPlace()
 	{
 		shouldntMoveAgent.exec();
@@ -116,6 +145,9 @@ public class AgentTest {
 		assertEquals("shouldntMoveAgent's heading was wrong", 0.0, shouldntMoveAgent.getHeading(), 0.0);
 	}
 	
+	/**
+	 * Test left turn.
+	 */
 	public void testTurnLeft()
 	{
 		turnLeftAgent.exec();
@@ -125,6 +157,9 @@ public class AgentTest {
 		assertEquals("turnLeftAgent's heading was wrong", 5.0, turnLeftAgent.getHeading(), 0.0);
 	}
 	
+	/**
+	 * Test right turn.
+	 */
 	public void testTurnRight()
 	{
 		turnRightAgent.exec();
@@ -134,6 +169,11 @@ public class AgentTest {
 		assertEquals("turnRightAgent's heading was wrong", 355.0, turnRightAgent.getHeading(), 0.0);
 	}
 
+	/**
+	 * Test sight of an agent.
+	 * The test checks if the agent can see entity before it, 
+	 * do not see the entity next to it and do not see the entity behind it.
+	 */
 	@Test
 	public void testSees() {
 		Entity seesThis = new Entity(moveForwardAgent.getxPos()+2*Entity.radius, moveForwardAgent.getyPos());

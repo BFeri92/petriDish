@@ -12,7 +12,11 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
+/**
+ * Test for {@link Genotype}.
+ * @author Ferenc Barta
+ *
+ */
 public class GenotypeTest {
 
 	private static Genotype g1;
@@ -30,7 +34,9 @@ public class GenotypeTest {
 			fail("Could not create genotype based on two other genotypes");
 		}
 	}
-	
+	/**
+	 * Tests generations increase.
+	 */
 	@Test
 	public void testGetGeneration() {
 		assertEquals("New genotypes generation should be 0", 0, g1.getGeneration());
@@ -38,6 +44,9 @@ public class GenotypeTest {
 		assertEquals("Two-parented genotypes generation should be one more than the maximum of it's parents generation.", 2, g3.getGeneration());
 	}
 
+	/**
+	 * Tests if the genes are inherited from parents.
+	 */
 	@Test
 	public void testGetGenes() {
 		List<Double> genom1=g1.getGenes();
@@ -45,12 +54,14 @@ public class GenotypeTest {
 		List<Double> genom3=g3.getGenes();
 		for (int i=0; i<genom1.size(); i++)
 		{
-			//System.out.println(genom1.get(i)+":"+genom2.get(i));
 			assertTrue("One-parented genotype have different gene than it's parent", genom1.get(i)==genom2.get(i));
 			assertTrue("Two-parented genotype have different gene than any of it's parents", (genom3.get(i)==genom2.get(i) || genom3.get(i)==genom1.get(i)));
 		}
 	}
 
+	/**
+	 * Tests {@link Genotype#getHiddenLayerCount()}.
+	 */
 	@Test
 	public void testGetHiddenLayerCount() {
 		assertEquals(2, g1.getHiddenLayerCount());

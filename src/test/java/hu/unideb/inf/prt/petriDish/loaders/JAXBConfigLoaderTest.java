@@ -13,6 +13,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+/**
+ * Test for {@link JAXBConfigLoader}.
+ * @author Ferenc Barta
+ *
+ */
 public class JAXBConfigLoaderTest {
 	
 	public static boolean isGetter(Method method)
@@ -26,6 +31,9 @@ public class JAXBConfigLoaderTest {
 	@Rule
 	public TemporaryFolder tempf = new TemporaryFolder();
 
+	/**
+	 * Creates a game configuration, saves it, then loads it and search for differences.
+	 */
 	@Test
 	public void testFunctionality() {
 		GameConfiguration origConf = new GameConfiguration();

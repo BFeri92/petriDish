@@ -1,5 +1,7 @@
 package hu.unideb.inf.prt.petriDish;
 
+import hu.unideb.inf.prt.petriDish.ANN.ANN;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -11,24 +13,53 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Genotypes are used to describe neural networks.
+ * Each gene represents a weight in the neural network.
+ * @author Ferenc Barta
+ *
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Genotype {
+	/**
+	 * Exception thrown when number of parents genes not match.
+	 * @author Ferenc Barta
+	 *
+	 */
 	public class GenomSizeNotMatchException extends Exception {
-		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Constructor.
+		 */
 		public GenomSizeNotMatchException() {
 		}
 
+		/**
+		 * Constructor.
+		 * @param message Message to be sent with the exception.
+		 */
 		public GenomSizeNotMatchException(String message) {
 			super(message);
 		}
 	}
 
+	/**
+	 * Gaussian function with mean = 0.
+	 * @param x function parameter
+	 * @param var variance
+	 * @return the function value with the given parameters
+	 */
 	private static double G(double x, double var) {
 		return Math.exp(-Math.pow(x, 2) / 2 * Math.pow(var, 2));
 	}
 
+	/**
+	 * Returns a random number from the Gaussian distribution.
+	 * @param var variance
+	 * @param rng uniform random number generator
+	 * @return a random number from the Gaussian distribution
+	 */
 	private static double randGaussian(double var, Random rng) {
 		double res;
 		double y;
@@ -39,40 +70,77 @@ public class Genotype {
 		return res;
 	}
 
+	/**
+	 * The generation of the genotype.
+	 */
 	@XmlElement(required = true, nillable = false)
 	private int generation;
+	/**
+	 * List of genes.
+	 */
 	@XmlElementWrapper(name = "genom")
 	@XmlElement(required = true, nillable = false, name = "gene")
 	private List<Double> genes;
+	/**
+	 * The number of the hidden layers.
+	 */
 	@XmlElement(required = true, nillable = false)
 	private int hiddenLayersCount;
+	/**
+	 * The number of genes per hidden layer.
+	 */
 	@XmlElement(required = true, nillable = false)
 	private int genesPerHiddenLayer;
 
+	/**
+	 * Returns the generation.
+	 * @return the generation
+	 */
 	public int getGeneration() {
 		return generation;
 	}
 
+	/**
+	 * Returns an unmodifiable list of genes.
+	 * @return an unmodifiable list of genes.
+	 */
 	public List<Double> getGenes() {
 		return Collections.unmodifiableList(genes);
 	}
 
+	/**
+	 * Returns the number of hidden layers.
+	 * @return the number of hidden layers.
+	 */
 	public int getHiddenLayerCount() {
 		return hiddenLayersCount;
 	}
 
+	/**
+	 * Return the number of genes per hidden layer.
+	 * @return the number of genes per hidden layer
+	 */
 	public int getGenesPerHiddenLayer() {
 		return genesPerHiddenLayer;
 	}
 
+	/**
+	 * Constructor.
+	 * Won't do anything, only used by JAXB loader.
+	 */
 	public Genotype() {
 
 	}
 
+	/**
+	 * Constructor, generates a random genom with the given parameters.
+	 * @param hiddenGeneCount The number of genes in each hidden layer.
+	 * @param hiddenLayerCount The number of hidden layers.
+	 */
 	public Genotype(int hiddenGeneCount, int hiddenLayerCount) {
-		int geneCount = Constants.inputNeuronCount * hiddenGeneCount
+		int geneCount = ANN.inputNeuronCount * hiddenGeneCount
 				+ (hiddenLayerCount - 1) * hiddenGeneCount * hiddenGeneCount
-				+ Constants.outputNeuronCount * hiddenGeneCount;
+				+ ANN.outputNeuronCount * hiddenGeneCount;
 		genesPerHiddenLayer = hiddenGeneCount;
 		genes = new Vector<Double>(geneCount);
 		Random rnd = new Random();
@@ -82,6 +150,11 @@ public class Genotype {
 		this.generation = 0;
 	}
 
+	/**
+	 * Constructor, copies the parents genom.
+	 * The generation will increase with one.
+	 * @param mother the base of the genom.
+	 */
 	public Genotype(Genotype mother) {
 		genesPerHiddenLayer = mother.getGenesPerHiddenLayer();
 		genes = new Vector<Double>();
@@ -91,6 +164,13 @@ public class Genotype {
 		this.generation = mother.generation + 1;
 	}
 
+	/**
+	 * Constructor, each gene will be copied from one of the parent randomly.
+	 * The generation will increase with one.
+	 * @param mother The first base of the genom
+	 * @param father The second base of the genom
+	 * @throws GenomSizeNotMatchException Thrown when parents gene count does not match.
+	 */
 	public Genotype(Genotype mother, Genotype father)
 			throws GenomSizeNotMatchException {
 		if (mother.genes.size() != father.genes.size()
@@ -109,6 +189,13 @@ public class Genotype {
 		}
 	}
 
+	/**
+	 * Constructor to manually set parameters.
+	 * @param generation generation
+	 * @param hiddenLayersCount the number of hidden layers
+	 * @param genesPerHiddenLayer the number of genes in each hidden layer
+	 * @param genes the genom.
+	 */
 	public Genotype(int generation, int hiddenLayersCount,
 			int genesPerHiddenLayer, List<Double> genes) {
 		this.genesPerHiddenLayer = genesPerHiddenLayer;
@@ -117,6 +204,13 @@ public class Genotype {
 		this.genes = new Vector<Double>(genes);
 	}
 
+	/**
+	 * Mutate each gene. 
+	 * Changes happen with the given probability and the amount of 
+	 * change will be a Gaussian random number with the given variance 
+	 * @param prob the probability of change to happen
+	 * @param variance the variance of the Gaussian distribution from which the delta will be sampled.
+	 */
 	public void mutate(double prob, double variance) {
 		Random rnd = new Random();
 		for (int i = 0; i < genes.size(); i++) {
@@ -128,6 +222,14 @@ public class Genotype {
 		}
 	}
 
+	/**
+	 * Compares if obj equals the genotype.
+	 * @param obj the object to compare to
+	 * @return true if obj is a Genotype, both obj and the
+	 * instance have the same generation, number of hidden layers,
+	 * number of genes in hidden layers, and genes. Otherwise it
+	 * returns false.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (!obj.getClass().equals(Genotype.class))

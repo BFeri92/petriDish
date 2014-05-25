@@ -11,32 +11,68 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The controller of the game.
+ * @author Ferenc Barta
+ *
+ */
 public class Simulation extends Thread {
+	/**
+	 * Logger.
+	 */
 	static private Logger logger = LoggerFactory.getLogger(Simulation.class);
+	/**
+	 * A list containing all world descriptors of the simulations lifetime.
+	 */
 	private List<WorldDescriptor> WDStack;
+	/**
+	 * The current game world.
+	 */
 	private GameWorld world;
+	/**
+	 * The number of created worlds.
+	 */
 	private int generation;
+	/**Simulation delay.
+	 * Time to wait between every world step in milliseconds.
+	 */
 	private long delay;
+	/**
+	 * Describes if the game should be paused.
+	 */
 	private boolean pause = false;
 
+	/**
+	 * Returns the simulation delay.
+	 * @return the current simulation delay.
+	 */
 	public long getDelay() {
 		return delay;
 	}
 
+	/**
+	 * Sets the simulation delay.
+	 * @param delay the delay to be used in milliseconds.
+	 */
 	public void setDelay(long delay) {
 		this.delay = delay;
 	}
-
-	private long lastRendered;
+	/**
+	 * Describes whether the simulation should be running.
+	 */
 	private boolean running;
 
+	/**
+	 * Creates simulation with the given world description and simulation delay.
+	 * @param descr the world descriptor to be used to create the game world.
+	 * @param stepDelay the delay to be used as simulation delay in milliseconds.
+	 */
 	Simulation(WorldDescriptor descr, long stepDelay) {
 		generation = 0;
 		WDStack = new Vector<WorldDescriptor>();
 		logger.info("Creating new simulation");
 		WDStack.add(descr);
 		delay = stepDelay;
-		lastRendered = 0;
 		try {
 			logger.info("Creating game world");
 			world = new GameWorld(descr);
@@ -47,6 +83,11 @@ public class Simulation extends Thread {
 		}
 	}
 
+	/**
+	 * The simulation loop.
+	 * Step the game world, create new if all the agents are dead, asks
+	 * the user interface to render.
+	 */
 	@Override
 	public void run() {
 		GameConfiguration conf = WDStack.get(WDStack.size() - 1)
@@ -79,7 +120,6 @@ public class Simulation extends Thread {
 					// if ((System.currentTimeMillis()-lastRendered)>100.0/6.0)
 					{
 						Game.getInstance().getUI().render();
-						lastRendered = System.currentTimeMillis();
 					}
 					Thread.sleep(delay);
 				} catch (InterruptedException e) {
@@ -95,33 +135,58 @@ public class Simulation extends Thread {
 		}
 	}
 
+	/**
+	 * Returns the number of the worlds created.
+	 * @return the number of the worlds created.
+	 */
 	public int getGeneration() {
 		return generation;
 	}
 
+	/**
+	 * Returns the number of steps made with the current world.
+	 * @return the number of steps made with the current world.
+	 */
 	public long getWorldAge() {
 		if (world != null)
 			return world.getStepCount();
 		return 0;
 	}
 
+	/**
+	 * Make the thread exit the simulation loop.
+	 */
 	public void stopSimulation() {
 		running = false;
 	}
 
+	/**
+	 * Returns the actual game world.
+	 * @return the actual game world.
+	 */
 	public GameWorld getWorld() {
 		return world;
 	}
 
+	/**
+	 * Returns the world descriptors used by the simulation.
+	 * @return the world descriptors used by the simulation.
+	 */
 	public List<WorldDescriptor> getWDStack() {
 		return Collections.unmodifiableList(WDStack);
 	}
 
+	/**
+	 * Suspend the thread.
+	 */
 	public void pause() {
 		logger.info("Game paused.");
 		this.pause = true;
 	}
 
+	/**
+	 * Resume the thread.
+	 */
 	public void unPause() {
 		synchronized (this) {
 			this.pause = false;

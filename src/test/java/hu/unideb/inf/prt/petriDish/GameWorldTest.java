@@ -5,8 +5,16 @@ import hu.unideb.inf.prt.petriDish.ANN.FeedForwardNeuron.WeigthNumberNotMatchExc
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+/**
+ * Test for {@link GameWorld}.
+ * @author Ferenc Barta
+ *
+ */
 public class GameWorldTest {
 
+	/**
+	 * Tests getters and {@link GameWorld#step()}. 
+	 */
 	@Test
 	public void test() {
 		GameConfiguration conf = new GameConfiguration();
@@ -27,12 +35,12 @@ public class GameWorldTest {
 				assertEquals(0, world.getDead().size());
 				first = world.getEntities().get(0);
 				second = world.getEntities().get(1);
-				if (first.colides(second)) continue;
+				if (first.collides(second)) continue;
 				world.step();
 				assertEquals(1, world.getStepCount());
 				assertEquals(3, world.getEntities().size());
 				assertEquals(0, world.getDead().size());
-				} while (first.colides(second));
+				} while (first.collides(second));
 		} catch (WeigthNumberNotMatchException e) {
 			fail("Gene count not match in configuration and world descriptors genoms.");
 		}

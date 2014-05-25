@@ -9,8 +9,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link FeedForwardNeuron}.
+ * @author Ferenc Barta
+ *
+ */
 public class FeedForwardNeuronTest {
-
+	/**
+	 * Tests if the neuron with two ConstantOneInputNeuron inputs returns the expected value.
+	 */
 	@Test
 	public void testGetValue() {
 		Layer l = new Layer();

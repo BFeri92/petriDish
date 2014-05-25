@@ -4,15 +4,12 @@ import hu.unideb.inf.prt.petriDish.Entity;
 import hu.unideb.inf.prt.petriDish.Game;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import java.awt.GridLayout;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -21,10 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.JScrollBar;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -33,7 +27,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import javax.swing.SwingConstants;
 
 public class MainWindow extends JFrame {
 

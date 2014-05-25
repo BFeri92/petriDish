@@ -10,7 +10,7 @@ import hu.unideb.inf.prt.petriDish.GameConfiguration;
  */
 public interface ConfigLoader {
 	/**
-	 * Loads a game configuration
+	 * Loads a game configuration.
 	 * 
 	 * @return The loaded configuration
 	 */
@@ -19,8 +19,7 @@ public interface ConfigLoader {
 	/**
 	 * Saves a game configuration.
 	 * 
-	 * @param conf
-	 *            The configuration to be saved
+	 * @param conf The configuration to be saved
 	 * @return True if save was successful, false otherwise
 	 */
 	boolean save(GameConfiguration conf);

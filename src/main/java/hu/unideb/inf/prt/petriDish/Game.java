@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -28,17 +27,45 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Singleton that holds the game-related objects and give high level
+ * services to control the game flow. 
+ * @author Ferenc Barta
+ *
+ */
 public class Game {
+	/**
+	 * The user interface.
+	 */
 	private View ui;
+	/**
+	 * The game controller.
+	 */
 	private Simulation sim = null;
+	/**
+	 * The only instance of the class created and returned by {@link getInstance()}.
+	 */
 	static private Game instance = null;
+	/**
+	 * Logger.
+	 */
 	static private Logger logger = LoggerFactory.getLogger(Game.class);
 
+	/**
+	 * Constructor.
+	 * Should only be called by {@link getInstance()}
+	 */
 	private Game() {
 		logger.info("Creating user interface");
 		ui = new SwingView();
 	}
 
+	/**
+	 * Returns the instance of the game.
+	 * If it doesn't exists, it will create it.
+	 * The user interface will be also constructed on the first call.
+	 * @return the instance of Game.
+	 */
 	static public Game getInstance() {
 		if (instance == null) {
 			instance = new Game();
@@ -47,15 +74,29 @@ public class Game {
 		return instance;
 	}
 
+	/**
+	 * Returns the user interface.
+	 * @return the user interface.
+	 */
 	public View getUI() {
 		return ui;
 	}
 
+	/**
+	 * Pauses the simulation by suspending the thread, if exists.
+	 * @see Simulation#pause()
+	 */
 	public void pauseSimulation() {
 		if (sim != null)
 			sim.pause();
 	}
 
+	/**
+	 * If a simulation is loaded, this method will start 
+	 * - in case it was not paused - or resume the thread
+	 * execution.
+	 * @see Simulation#unPause()
+	 */
 	public void startSimulation() {
 		if (sim == null)
 			return;
@@ -67,6 +108,11 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Tries to load the given world descriptor and
+	 * create a new simulation.
+	 * @param fname The path to the world descriptor
+	 */
 	public void loadWorldDescriptor(String fname) {
 		WDLoader loader = new JAXBWDLoader(fname);
 		WorldDescriptor descr = loader.load();
@@ -81,6 +127,11 @@ public class Game {
 			ui.error("Could not load world descriptor file.");
 	}
 
+	/**
+	 * Tries to load the given game configuration and
+	 * create a new simulation.
+	 * @param fname The path to the game configuration
+	 */
 	public void loadGameConfiguration(String fname) {
 		ConfigLoader loader = new JAXBConfigLoader(fname);
 		GameConfiguration conf = loader.load();
@@ -95,6 +146,11 @@ public class Game {
 			ui.error("Could not load game configuration file.");
 	}
 
+	/**
+	 * If simulation is created, this method saves all the world 
+	 * descriptors from the simulation into a tar archive.
+	 * @param fname The path of the tar archive in which the world descriptors should be saved.
+	 */
 	public void saveSimulation(String fname) {
 		if (sim != null) {
 			try {
@@ -117,8 +173,6 @@ public class Game {
 								tar_output);
 				/* Create Archieve entry - write header information */
 				for (int i = 0; i < worldsToSave.size(); i++) {
-					System.out.println(td + "/"
-							+ Integer.toString(i) + ".xml");
 					File tar_input_file = new File(td + "/"
 							+ Integer.toString(i) + ".xml");
 					TarArchiveEntry tar_file = new TarArchiveEntry(
@@ -133,7 +187,6 @@ public class Game {
 				tar_output.close();
 			} catch (IOException e) {
 				logger.error("IO error while saving simulation.");
-				System.out.println(e);
 				ui.error("Exception occured while saving simulation.");
 			} catch (ArchiveException e) {
 				logger.error("Error while creating TAR archive");
@@ -143,6 +196,10 @@ public class Game {
 
 	}
 
+	/**
+	 * Tries to load the default game configuration 
+	 * from the resources and create a new simulation.
+	 */
 	public void loadDefaultConfiguration() {
 		InputStream resource = Game.class
 				.getResourceAsStream("/default.cfg.xml");
@@ -161,11 +218,19 @@ public class Game {
 
 	}
 
+	/**
+	 * Set simulation delay, making the simulation speed change.
+	 * @see Simulation#setDelay(long)
+	 * @param dly the new delay
+	 */
 	public void setDelay(long dly) {
 		if (sim != null)
 			sim.setDelay(dly);
 	}
 
+	/**
+	 * Stops the simulation thread.
+	 */
 	public void stopSimulation() {
 		if (sim != null) {
 			if (sim.getState() == Thread.State.WAITING) {
@@ -175,13 +240,21 @@ public class Game {
 		}
 	}
 
-	public synchronized List<Entity> getEntities() {
+	/**
+	 * If simulation exists, this method returns a synchronized, unmodifiable list of entities in simulations game world.
+	 * @return Returns list of entities or if the simulation not constructed, an empty array
+	 */
+	public List<Entity> getEntities() {
 		if (sim != null)
-			return Collections.unmodifiableList(sim.getWorld().getEntities());
+			return Collections.synchronizedList(Collections.unmodifiableList(sim.getWorld().getEntities()));
 		else
 			return new ArrayList<Entity>();
 	}
 
+	/**
+	 * Returns the number of worlds created in the simulation.
+	 * @return the number of worlds created in the simulation.
+	 */
 	public int getGeneration() {
 		if (sim != null) {
 			return sim.getGeneration();
@@ -189,6 +262,10 @@ public class Game {
 			return 0;
 	}
 
+	/**
+	 * Returns the number of steps made with the current world.
+	 * @return the number of steps made with the current world.
+	 */
 	public long getWorldAge() {
 		if (sim != null) {
 			return sim.getWorldAge();
@@ -196,6 +273,10 @@ public class Game {
 			return 0;
 	}
 
+	/**
+	 * Returns the number of living agents in the current world.
+	 * @return the number of living agents in the current world.
+	 */
 	public int getAgentsAlive() {
 		if (sim != null) {
 			return sim.getWorld().getConfiguration().getAgentCount()
@@ -204,6 +285,10 @@ public class Game {
 			return 0;
 	}
 
+	/**
+	 * Returns if there is a simulation constructed.
+	 * @return if there is a simulation constructed.
+	 */
 	public boolean hasSimulationLoaded() {
 		if (sim == null)
 			return false;

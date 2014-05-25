@@ -6,10 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,22 +17,37 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class for load and save game configurations with JAXB.
+ * @author Ferenc Barta
+ *
+ */
 public class JAXBConfigLoader implements ConfigLoader {
 
+	/**
+	 * Logger.
+	 */
 	static private Logger logger = LoggerFactory
 			.getLogger(JAXBConfigLoader.class);
 
-	// private File f=null;
+	/**
+	 * The input stream for loading.
+	 */
 	private InputStream istream = null;
+	/**
+	 * The output stream for saving.
+	 */
 	private OutputStream ostream = null;
+	/**
+	 * File used for loading/saving.
+	 */
 	private File f;
 
 	/**
 	 * Constructor, the configuration will be loaded/saved to the file described
 	 * by the parameter.
 	 * 
-	 * @param f
-	 *            File to use
+	 * @param f File to use
 	 */
 	public JAXBConfigLoader(File f) {
 		this.f = f;
@@ -44,23 +57,35 @@ public class JAXBConfigLoader implements ConfigLoader {
 	 * Constructor, the configuration will be loaded/saved to the file described
 	 * by the parameter.
 	 * 
-	 * @param f
-	 *            File path of the file to use
+	 * @param path File path of the file to use
 	 */
 	public JAXBConfigLoader(String path) {
 		f = new File(path);
 	}
 
+	/**
+	 * Creates loader, the configuration will be read from the given input stream.
+	 * {@link JAXBConfigLoader#save(GameConfiguration)} will fail on loaders created with this constructor. 
+	 * @param istream the input stream to use.
+	 */
 	public JAXBConfigLoader(InputStream istream) {
 		this.istream = istream;
 		this.ostream = null;
 	}
-
+	/**
+	 * Creates loader, the configuration will be written to the output stream.
+	 * {@link JAXBConfigLoader#load()} will fail on loaders created with this constructor.
+	 * @param ostream the output stream to use.
+	 */
 	public JAXBConfigLoader(OutputStream ostream) {
 		this.ostream = ostream;
 		this.istream = null;
 	}
 
+	/**
+	 * Returns a game configuration loaded from the input specified when creating the loader.
+	 * @return the loaded game configuration.
+	 */
 	public GameConfiguration load() {
 		try {
 			if (istream == null) {
@@ -83,7 +108,11 @@ public class JAXBConfigLoader implements ConfigLoader {
 			return null;
 		}
 	}
-
+	/**
+	 * Saves a game configuration to the output specified when creating the loader.
+	 * @param conf the game configuration to save
+	 * @return false on error, true otherwise
+	 */
 	public boolean save(GameConfiguration conf) {
 		boolean ostreamCreatedHere = false;
 		try {

@@ -13,7 +13,11 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
+/**
+ * Test for {@link JAXBWDLoader}.
+ * @author Ferenc Barta
+ *
+ */
 public class JAXBWDLoaderTest {
 	
 	public static boolean isGetter(Method method)
@@ -26,7 +30,10 @@ public class JAXBWDLoaderTest {
 	
 	@Rule
 	public TemporaryFolder tempf = new TemporaryFolder();
-
+	
+	/**
+	 * Creates a world descriptor, saves it, then loads it and search for differences.
+	 */
 	@Test
 	public void testFunctionality() {
 		GameConfiguration origConf = new GameConfiguration();

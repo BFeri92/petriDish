@@ -9,6 +9,6 @@
     <mutationProb>0.08</mutationProb>
     <nodesPerHiddenLayer>4</nodesPerHiddenLayer>
     <recombine>true</recombine>
-    <winnerCount>5</winnerCount>
+    <winnerCount>3</winnerCount>
     <worldSize>1000</worldSize>
 </gameConfiguration>

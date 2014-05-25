@@ -10,7 +10,6 @@ import java.awt.Graphics2D;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class PDDisplayPanel extends JPanel {
 	private int xPos = 0;

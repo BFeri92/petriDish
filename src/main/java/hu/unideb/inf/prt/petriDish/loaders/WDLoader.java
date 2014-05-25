@@ -2,9 +2,15 @@ package hu.unideb.inf.prt.petriDish.loaders;
 
 import hu.unideb.inf.prt.petriDish.WorldDescriptor;
 
+/**
+ * Interface for loading/saving world descriptors.
+ * @author Ferenc Barta
+ *
+ */
+
 public interface WDLoader {
 	/**
-	 * Loads a world descriptor
+	 * Loads a world descriptor.
 	 * 
 	 * @return The loaded world descriptor
 	 */
