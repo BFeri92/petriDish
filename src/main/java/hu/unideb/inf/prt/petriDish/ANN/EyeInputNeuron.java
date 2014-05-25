@@ -18,15 +18,16 @@ public class EyeInputNeuron implements Neuron {
 
 	public void preCalc() {
 		List<Entity> entities = Game.getInstance().getEntities();
-		double minDst = Agent.viewDistanceSquared + 1;
+		double minDst = Agent.viewDistance + 1;
 		for (Entity e : entities) {
 			if (e.getClass().equals(FoodEntity.class) && owner.sees(e)) {
-				if (minDst > owner.distanceSquared(e))
-					minDst = owner.distanceSquared(e);
+				double distance = Math.sqrt(owner.distanceSquared(e));
+				if (minDst > distance)
+					minDst = distance;
 			}
 		}
-		if (minDst < Agent.viewDistanceSquared + 1) {
-			stored = minDst / Agent.viewDistanceSquared;
+		if (minDst < Agent.viewDistance + 1) {
+			stored = minDst / Agent.viewDistance;
 			return;
 		}
 		stored = 0;
