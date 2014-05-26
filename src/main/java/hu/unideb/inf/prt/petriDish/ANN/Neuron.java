@@ -9,9 +9,9 @@ package hu.unideb.inf.prt.petriDish.ANN;
 public interface Neuron {
 	/**
 	 * Can be used to calculate and store the value.
-	 * In contrast with the {@link getValue()} method, this method runs only once 
-	 * in each {@link ANN.run()} call, hence it can be used to calculate the neuron
-	 * value, store it, then return the stored value when {@link getValue()}
+	 * In contrast with the {@link #getValue()} method, this method runs only once 
+	 * in each {@link ANN#run()} call, hence it can be used to calculate the neuron
+	 * value, store it, then return the stored value when {@link #getValue()}
 	 * is called. 
 	 */
 	public void preCalc();

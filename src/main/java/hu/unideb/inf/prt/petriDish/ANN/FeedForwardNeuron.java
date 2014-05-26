@@ -75,7 +75,7 @@ public class FeedForwardNeuron implements Neuron {
 
 	/**
 	 * Calculates and stores the value of the neuron.
-	 * Required to call before calling {@link getValue()}.<br/>
+	 * Required to call before calling {@link #getValue()}.<br/>
 	 * As it uses the getValue() method on the neurons
 	 * in the previous layer, those neurons should be
 	 * evaluated before this method is called.
@@ -91,7 +91,7 @@ public class FeedForwardNeuron implements Neuron {
 
 	/**
 	 * Returns the value of the neuron.
-	 * Evaluating with {@link preCalc()} method before calling this 
+	 * Evaluating with {@link #preCalc()} method before calling this 
 	 * method is needed to return the correct value.
 	 * @return Returns the value given by {@code logSigmoid(i)} where i is the weighted sum of the input values.
 	 */

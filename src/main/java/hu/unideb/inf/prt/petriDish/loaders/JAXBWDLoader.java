@@ -63,7 +63,7 @@ public class JAXBWDLoader implements WDLoader {
 	}
 	/**
 	 * Creates loader, the world descriptor will be read from the given input stream.
-	 * {@link JAXBWDLoader#save(GameConfiguration)} will fail on loaders created with this constructor. 
+	 * {@link JAXBWDLoader#save(WorldDescriptor)} will fail on loaders created with this constructor. 
 	 * @param istream the input stream to use.
 	 */
 	public JAXBWDLoader(InputStream istream) {

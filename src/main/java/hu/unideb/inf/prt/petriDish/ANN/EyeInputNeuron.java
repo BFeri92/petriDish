@@ -17,7 +17,7 @@ public class EyeInputNeuron implements Neuron {
 	 */
 	private Agent owner;
 	/**
-	 * Stored value from {@link preCalc()}.
+	 * Stored value from {@link #preCalc()}.
 	 */
 	private double stored;
 
@@ -31,7 +31,7 @@ public class EyeInputNeuron implements Neuron {
 
 	/**
 	 * Calculates and stores the value of the neuron.
-	 * Required to call before calling {@link getValue()}.
+	 * Required to call before calling {@link #getValue()}.
 	 */
 	public void preCalc() {
 		List<Entity> entities = Game.getInstance().getEntities();
@@ -53,7 +53,7 @@ public class EyeInputNeuron implements Neuron {
 
 	/**
 	 * Returns the value of the neuron.
-	 * Evaluating with {@link preCalc()} method before calling this 
+	 * Evaluating with {@link #preCalc()} method before calling this 
 	 * method is needed to return the correct value.
 	 * @see hu.unideb.inf.prt.petriDish.Agent#sees(Entity)
 	 * @return The returned value will between 0 and 1 and will be linear to 

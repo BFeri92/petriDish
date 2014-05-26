@@ -142,7 +142,7 @@ public class Agent extends Entity {
 	/**
 	 * Applies the position and heading change.
 	 * The output of the neural network determine the movement, thus 
-	 * {@link exec()} method must be called before. 
+	 * {@link Agent#exec()} method must be called before. 
 	 */
 	public void apply() {
 		heading += headingDelta;

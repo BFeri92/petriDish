@@ -1,0 +1,21 @@
+PetriDish
+
+PetriDish is a simple evolutionary game based on
+neuroevolution algorithms. Agents are created with
+random weights in their neural networks defining
+a random behavior, the most fit agents (those who
+was alive for the longest time) will define the
+base of the next generation. Ideally, after some 
+time, the agents will collect food more efficiently.
+
+You can get a copy of the latest version of the program
+with git by running
+git clone https://github.com/BFeri92/petriDish.git
+
+To get a single executable jar package from the source
+code, you should use maven:
+mvn package
+
+The documentation of the source code can also be generated 
+with maven:
+mvn javadoc:javadoc
